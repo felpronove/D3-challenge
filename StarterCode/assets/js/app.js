@@ -27,8 +27,10 @@ d3.csv("assets/data/data.csv").then(function(StateData) {
 
     // sort through the data
     StateData.forEach(function(data) {
-
-    })
+      data.abbr=+data.abbr;
+      data.obesity=+data.obesity;
+      data.income=+data.income;
+    });
     
     // create scales
     // compare income levels vs obesity levels
@@ -51,4 +53,16 @@ d3.csv("assets/data/data.csv").then(function(StateData) {
 
     chartGroup.append("g")
       .call(yAxis);
+
+    // append circles
+    var circlesGroup = chartGroup.selectAll("circle")
+      .data(StateData)
+      .enter()
+      .append("circle")
+      .attr("cx", d=> xLinearScale(d.income))
+      .attr("cy", d=> yLinearScale(d.obesity))
+      .attr("r", "10")
+      .attr("fill", "gold")
+      .attr("stroke-width", "1")
+      .attr("stroke", "black");
 });
