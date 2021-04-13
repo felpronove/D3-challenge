@@ -25,46 +25,65 @@ d3.csv("assets/data/data.csv").then(function(StateData) {
     console.log(StateData);
     console.log([StateData]);
 
-    // sort through the data
-    StateData.forEach(function(data) {
-      data.abbr=+data.abbr;
-      data.obesity=+data.obesity;
-      data.income=+data.income;
-    });
+  // sort through the data
+  StateData.forEach(function(data) {
+    data.abbr=+data.abbr;
+    data.obesity=+data.obesity;
+    data.income=+data.income;
+  });
     
-    // create scales
-    // compare income levels vs obesity levels
-    var xLinearScale = d3.scaleLinear()
-        .domain(d3.extent(StateData, d => d.income))
-        .range([0, width]);
+  // create scales
+  // compare income levels vs obesity levels
+  var xLinearScale = d3.scaleLinear()
+    .domain([d3.min(StateData, d=> d.income)*.75,
+      d3.max(StateData, d=> d.income)*1.25
+    ])
+    .range([0, width]);
   
-    var yLinearScale = d3.scaleLinear()
-        .domain([0, d3.max(StateData, d => d.obesity)])
-        .range([height, 0]);
+  var yLinearScale = d3.scaleLinear()
+      .domain([0, d3.max(StateData, d => d.obesity)*1.25])
+      .range([height, 0]);
 
-    // create axes
-    var xAxis = d3.axisBottom(xLinearScale).ticks(10);
-    var yAxis = d3.axisLeft(yLinearScale).ticks(10);
+  // create initial axis function
+  var bottomAxis = d3.axisBottom(xLinearScale).ticks(10);
+  var leftAxis = d3.axisLeft(yLinearScale).ticks(10);
 
-    // append axes
-    chartGroup.append("g")
-      .attr("transform", `translate(0, ${height})`)
-      .call(xAxis);
+  // append x axis
+  var xAxis = chartGroup.append("g")
+    .classed("x-axis", true)
+    .attr("transform", "translate(0, ${height})")
+    .call(bottomAxis);
+    
+  // append y axis
+  var yAxis = chartGroup.append("g")
+    .call(leftAxis);
+      
+  // append circles
+  var circlesGroup = chartGroup.selectAll("circle")
+    .data(StateData)
+    .enter()
+    .append("circle")
+    .attr("cx", d=> xLinearScale(d.income))
+    .attr("cy", d=> yLinearScale(d.obesity))
+    .attr("r", "15")
+    .attr("fill", "orange")
+    .attr("opacity", ".4");
 
-    chartGroup.append("g")
-      .call(yAxis);
+  // append state abbreviation to the circle corresponding to the state
 
-    // append circles
-    var circlesGroup = chartGroup.selectAll("circle")
-      .data(StateData)
-      .enter()
-      .append("circle")
-      .attr("cx", d=> xLinearScale(d.income))
-      .attr("cy", d=> yLinearScale(d.obesity))
-      .attr("r", "15")
-      .attr("fill", "orange")
-      .attr("stroke-width", "1")
-      .attr("stroke", "green");
+  // append x axis label
+  chartGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 20)
+    .classed("axis-text", true)
+    .text("Income");
 
-      // append state abbreviation to the circle corresponding to the state
+  // append y axis label
+  chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("dy", "1em")
+    .classed("axis-text", true)
+    .text("Obesity");
+    
 });
