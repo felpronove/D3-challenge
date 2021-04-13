@@ -61,8 +61,10 @@ d3.csv("assets/data/data.csv").then(function(StateData) {
       .append("circle")
       .attr("cx", d=> xLinearScale(d.income))
       .attr("cy", d=> yLinearScale(d.obesity))
-      .attr("r", "10")
-      .attr("fill", "gold")
+      .attr("r", "15")
+      .attr("fill", "orange")
       .attr("stroke-width", "1")
-      .attr("stroke", "black");
+      .attr("stroke", "green");
+
+      // append state abbreviation to the circle corresponding to the state
 });
