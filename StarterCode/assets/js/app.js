@@ -23,11 +23,11 @@ var chartGroup = svg.append("g")
 // Import data from the data csv file
 d3.csv("assets/data/data.csv").then(function(StateData) {
     console.log(StateData);
-    // console.log([StateData]);
+    // successfully importing data but the state abbreviations show as NaN
 
   // sort through the data
   StateData.forEach(function(data) {
-    data.abbr=+data.abbr;
+    data.abbr=data.abbr;
     data.obesity=+data.obesity;
     data.income=+data.income;
   });
@@ -66,34 +66,38 @@ d3.csv("assets/data/data.csv").then(function(StateData) {
     circlesGroup.append("circle")
     .attr("cx", d=> xLinearScale(d.income))
     .attr("cy", d=> yLinearScale(d.obesity))
-    .attr("r", "15")
+    .attr("r", "12")
     .attr("fill", "orange")
     .attr("opacity", ".8");
 
-  circlesGroup.append("abbr-text")
+  circlesGroup.append("state-text")
+    .append("text")
     .text(function(d){
       return d.abbr
     })
     .attr("cx", d=> xLinearScale(d.income))
     .attr("cy", d=> yLinearScale(d.obesity))  
-    .classed("state-text", true);
+    .classed("stateText", true)
+    .attr("font-size", 12);
     // .text(d.abbr);
 
   // append state abbreviation to the circle corresponding to the state
 
   // append x axis label
-  chartGroup.append("text")
+  chartGroup.append("Axis-text")
+    .append("text")
     .attr("x", 0)
     .attr("y", 20)
-    .classed("axis-text", true)
+    .classed("x-axis-text", true)
     .text("Income");
 
   // append y axis label
-  chartGroup.append("text")
+  chartGroup.append("Yaxis-text")
+    .append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
     .attr("dy", "1em")
-    .classed("axis-text", true)
+    .classed("y-axis-text", true)
     .text("Obesity");
     
 });
