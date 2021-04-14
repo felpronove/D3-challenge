@@ -23,7 +23,7 @@ var chartGroup = svg.append("g")
 // Import data from the data csv file
 d3.csv("assets/data/data.csv").then(function(StateData) {
     console.log(StateData);
-    console.log([StateData]);
+    // console.log([StateData]);
 
   // sort through the data
   StateData.forEach(function(data) {
@@ -51,23 +51,33 @@ d3.csv("assets/data/data.csv").then(function(StateData) {
   // append x axis
   var xAxis = chartGroup.append("g")
     .classed("x-axis", true)
-    .attr("transform", "translate(0, ${height})")
+    .attr("transform", `translate(0, ${height})`)
     .call(bottomAxis);
     
   // append y axis
   var yAxis = chartGroup.append("g")
     .call(leftAxis);
-      
+  console.log("second", StateData)    
   // append circles
   var circlesGroup = chartGroup.selectAll("circle")
     .data(StateData)
-    .enter()
-    .append("circle")
+    .enter();
+  
+    circlesGroup.append("circle")
     .attr("cx", d=> xLinearScale(d.income))
     .attr("cy", d=> yLinearScale(d.obesity))
     .attr("r", "15")
     .attr("fill", "orange")
-    .attr("opacity", ".4");
+    .attr("opacity", ".8");
+
+  circlesGroup.append("abbr-text")
+    .text(function(d){
+      return d.abbr
+    })
+    .attr("cx", d=> xLinearScale(d.income))
+    .attr("cy", d=> yLinearScale(d.obesity))  
+    .classed("state-text", true);
+    // .text(d.abbr);
 
   // append state abbreviation to the circle corresponding to the state
 
