@@ -66,19 +66,23 @@ d3.csv("assets/data/data.csv").then(function(StateData) {
     circlesGroup.append("circle")
     .attr("cx", d=> xLinearScale(d.income))
     .attr("cy", d=> yLinearScale(d.obesity))
-    .attr("r", "12")
-    .attr("fill", "orange")
-    .attr("opacity", ".8");
+    .attr("r", "13")
+    .classed("stateCircle", true);
+    // .attr("fill", "orange")
+    // .attr("opacity", ".8");
 
-  circlesGroup.append("state-text")
-    .append("text")
+ // chartGroup.selectAll("state-text")
+    circlesGroup.append('text')
+    //.data(StateData)
+    //.enter()
+    //.append("text")
     .text(function(d){
       return d.abbr
     })
-    .attr("cx", d=> xLinearScale(d.income))
-    .attr("cy", d=> yLinearScale(d.obesity))  
+    .attr("dx", d=> xLinearScale(d.income))
+    .attr("dy", d=> yLinearScale(d.obesity))  
     .classed("stateText", true)
-    .attr("font-size", 12);
+    .attr("font-size", 10);
     // .text(d.abbr);
 
   // append state abbreviation to the circle corresponding to the state
